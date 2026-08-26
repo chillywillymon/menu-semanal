@@ -1,0 +1,1522 @@
+/* ==========================================================================
+   DESIGN SYSTEM & VARIABLES (COCINITAS TIME)
+   ========================================================================== */
+:root {
+  /* Colors */
+  --bg-primary: #FAF9F6;       /* Warm organic off-white */
+  --bg-card: #FFFFFF;          /* Pure white cards */
+  --bg-dark-bezel: #2E2922;    /* Bezel color for desktop simulation */
+  
+  --color-primary: #E29B30;    /* Vibrant honey/mustard gold */
+  --color-primary-hover: #C58320;
+  --color-primary-light: #FBEFDF; /* Soft highlight */
+  --color-primary-subtle: #FFFDF9;
+  
+  --color-text-main: #332E27;  /* Dark warm charcoal */
+  --color-text-muted: #7E7467; /* Soft brown-gray */
+  --color-text-light: #A49A8E; /* Neutral gray */
+  
+  --color-border: #F0ECE4;     /* Light warm gray border */
+  
+  --color-success: #5B7053;    /* Olive green */
+  --color-success-light: #EDF3EC;
+  --color-danger: #C05C3F;     /* Rust red */
+  --color-danger-light: #FCEFEA;
+  
+  /* Fonts */
+  --font-family-headings: 'Outfit', sans-serif;
+  --font-family-base: 'Inter', sans-serif;
+  
+  /* Layout sizes */
+  --mobile-nav-height: 64px;
+  --mobile-header-height: 104px;
+  --border-radius-xl: 24px;
+  --border-radius-lg: 16px;
+  --border-radius-md: 12px;
+  --border-radius-sm: 8px;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(46, 41, 34, 0.03);
+  --shadow-md: 0 6px 16px rgba(226, 155, 48, 0.06);
+  --shadow-lg: 0 12px 36px rgba(46, 41, 34, 0.1);
+  --shadow-primary: 0 8px 24px rgba(226, 155, 48, 0.2);
+  
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-fast: all 0.15s ease;
+}
+
+/* ==========================================================================
+   RESET & FOUNDATIONS
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--bg-primary);
+  color: var(--color-text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  
+  /* Center the app on desktop screen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-headings);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+button, input, textarea {
+  font-family: inherit;
+}
+
+/* Scrollbar styling for inside lists */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-light);
+}
+
+/* Helper utility classes */
+.hidden { display: none !important; }
+.text-muted { color: var(--color-text-muted); }
+.text-sm { font-size: 0.825rem; }
+.mb-4 { margin-bottom: 1.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.required { color: var(--color-danger); }
+.badge {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  padding: 1px 5px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   ORGANIC BACKGROUND FLUID BLOBS (FOR DESKTOP AMBIENT)
+   ========================================================================== */
+.honey-blob {
+  position: fixed;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.45;
+  animation: float-blob 22s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+  top: -100px;
+  left: -100px;
+  width: 500px;
+}
+
+.blob-2 {
+  bottom: -120px;
+  right: -120px;
+  width: 600px;
+  animation-delay: -6s;
+}
+
+@keyframes float-blob {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.04) rotate(12deg);
+  }
+  100% {
+    transform: translate(-30px, 40px) scale(0.96) rotate(-8deg);
+  }
+}
+
+/* ==========================================================================
+   MOBILE FRAME WORKSPACE (CENTRAL DEVICE SIMULATOR)
+   ========================================================================== */
+.app-mobile-container {
+  width: 100%;
+  max-width: 440px;          /* Perfect mobile size on desktop */
+  height: 85vh;             /* Standout device height */
+  max-height: 880px;
+  min-height: 620px;
+  background-color: var(--bg-card);
+  border: 10px solid var(--bg-dark-bezel); /* Device frame bezel */
+  border-radius: 36px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+}
+
+/* Responsive adjust for pure mobile screens */
+@media (max-width: 480px), (max-height: 550px) {
+  body {
+    padding: 0;
+  }
+  .app-mobile-container {
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+/* ==========================================================================
+   MOBILE HEADER
+   ========================================================================== */
+.mobile-header {
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+  gap: 10px;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.header-brand-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary);
+}
+
+.app-logo i {
+  font-size: 1.5rem;
+}
+
+.app-logo span {
+  font-family: var(--font-family-headings);
+  font-weight: 800;
+  font-size: 1.28rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-main);
+}
+
+.header-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-header-action {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-header-action:hover, .btn-header-action:active {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.header-sub-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-primary);
+  padding: 6px 12px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.week-navigation-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.btn-picker-nav {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.week-text-display {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--color-text-main);
+  user-select: none;
+}
+
+.btn-today-badge {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-hover);
+  border: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: var(--transition-fast);
+}
+
+.btn-today-badge:hover {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   SCROLLABLE CONTENT AREA
+   ========================================================================== */
+.mobile-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.view-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ==========================================================================
+   NAVIGATION BAR (BOTTOM DOCK)
+   ========================================================================== */
+.mobile-nav {
+  height: var(--mobile-nav-height);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-around;
+  z-index: 10;
+  flex-shrink: 0;
+  box-shadow: 0 -2px 10px rgba(46, 41, 34, 0.02);
+}
+
+.mobile-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.mobile-nav-item i {
+  font-size: 1.35rem;
+}
+
+.mobile-nav-item.active {
+  color: var(--color-primary);
+}
+
+.mobile-nav-item.active i {
+  font-weight: bold;
+}
+
+.mobile-nav-item .badge {
+  position: absolute;
+  top: 6px;
+  right: calc(50% - 20px);
+  border: 1.5px solid #FFFFFF;
+  padding: 0 4px;
+  min-width: 15px;
+}
+
+/* Floating Action Button (FAB) */
+.fab {
+  position: absolute;
+  bottom: calc(16px + var(--mobile-nav-height));
+  right: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-primary);
+  cursor: pointer;
+  border: none;
+  z-index: 8;
+  font-size: 1.4rem;
+  transition: var(--transition-smooth);
+}
+
+.fab:active {
+  transform: scale(0.9) rotate(90deg);
+}
+
+/* ==========================================================================
+   BUTTONS & COMMON COMPONENTS
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--border-radius-md);
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+}
+.btn-primary:active {
+  background-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border);
+}
+.btn-secondary:active {
+  background-color: var(--bg-primary);
+}
+
+.btn-danger {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+.btn-danger:active {
+  background-color: var(--color-danger);
+  color: #FFFFFF;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  border-radius: var(--border-radius-sm);
+}
+
+/* ==========================================================================
+   VISTAS - 1. VISTA PLAN SEMANAL (TABLERO MÓVIL VERTICAL)
+   ========================================================================== */
+.mobile-kanban-board {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mobile-day-card {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: var(--transition-fast);
+}
+
+.mobile-day-card.today {
+  border: 1.5px solid var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+
+.mobile-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-day-title {
+  font-family: var(--font-family-headings);
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.mobile-day-title span {
+  font-size: 0.8rem;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-left: 6px;
+}
+
+.mobile-day-badge-today {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+
+.mobile-day-meals-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.meal-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meal-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.meal-slot.comida .meal-label i { color: #E8A838; }
+.meal-slot.cena .meal-label i { color: #5B6D8C; }
+
+/* Empty slot button */
+.empty-meal-btn {
+  background-color: var(--bg-primary);
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  min-height: 84px;
+}
+
+.empty-meal-btn:active {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-hover);
+}
+
+.empty-meal-btn i {
+  font-size: 1.15rem;
+}
+
+.empty-meal-btn span {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* Filled meal card */
+.filled-meal-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  min-height: 84px;
+}
+
+.filled-meal-card:active {
+  border-color: var(--color-primary);
+}
+
+.meal-img-wrapper {
+  height: 48px;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--color-primary-light);
+}
+
+.meal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.meal-card-info {
+  padding: 6px 8px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.meal-title {
+  font-family: var(--font-family-headings);
+  font-weight: 700;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--color-text-main);
+}
+
+/* ==========================================================================
+   VISTAS - 2. VISTA DÍA A DÍA
+   ========================================================================== */
+.day-by-day-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.day-detail-card {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.day-detail-card.is-today {
+  border: 1.5px solid var(--color-primary);
+}
+
+.detail-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-primary-light);
+}
+
+.detail-title h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-title span {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-family-base);
+  font-weight: 500;
+}
+
+.detail-meals-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.detail-meal-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.detail-meal-banner {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  background-color: var(--color-primary-light);
+  flex-shrink: 0;
+}
+
+.detail-meal-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-meal-body {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.detail-meal-badge-type {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.detail-meal-badge-type.comida { color: #E8A838; }
+.detail-meal-badge-type.cena { color: #5B6D8C; }
+
+.detail-meal-title {
+  font-family: var(--font-family-headings);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.detail-ingredients-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.detail-ingredients-list {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detail-ingredients-list li {
+  padding-left: 10px;
+  position: relative;
+}
+
+.detail-ingredients-list li::before {
+  content: "•";
+  color: var(--color-primary);
+  position: absolute;
+  left: 0;
+}
+
+.detail-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 12px;
+  background-color: var(--bg-primary);
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-muted);
+  text-align: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.detail-empty-state i {
+  font-size: 1.5rem;
+  color: var(--color-text-light);
+}
+
+.detail-empty-state p {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   VISTAS - 3. VISTA RECETARIO (GALERIA MÓVIL)
+   ========================================================================== */
+.recetario-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: var(--bg-card);
+  padding: 12px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.85rem;
+}
+
+.search-box input:focus {
+  border-color: var(--color-primary);
+  background-color: #FFFFFF;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-light);
+  font-size: 1rem;
+}
+
+.filter-tabs {
+  display: flex;
+  background-color: var(--bg-primary);
+  padding: 3px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-border);
+  gap: 2px;
+}
+
+.filter-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-align: center;
+}
+
+.filter-tab.active {
+  background-color: var(--bg-card);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.recipe-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.recipe-card {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  position: relative;
+}
+
+.recipe-card-img-wrapper {
+  width: 100px;
+  height: 100%;
+  min-height: 110px;
+  background-color: var(--color-primary-light);
+  flex-shrink: 0;
+}
+
+.recipe-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipe-badge-type {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+.recipe-badge-type.comida { background-color: #E8A838; }
+.recipe-badge-type.cena { background-color: #5B6D8C; }
+
+.recipe-card-content {
+  padding: 12px;
+  flex-grow: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recipe-card-title {
+  font-family: var(--font-family-headings);
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.recipe-card-ingredients {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 6px;
+}
+
+.recipe-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+}
+
+/* ==========================================================================
+   MODAL WINDOWS & BACKDROPS (MOBILE OPTIMIZED)
+   ========================================================================== */
+.modal-backdrop {
+  position: absolute; /* Lock relative to mobile container */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(46, 41, 34, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end; /* Slide up from bottom on mobile */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+  width: 100%;
+  max-height: 88%;
+  box-shadow: 0 -8px 24px rgba(46, 41, 34, 0.15);
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
+  overflow: hidden;
+}
+
+.modal-backdrop.open .modal-card {
+  transform: translateY(0);
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: var(--color-primary-light);
+}
+
+.modal-header h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.modal-subtitle {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 1px;
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background-color: var(--bg-primary);
+  align-items: center;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--color-text-main);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.label-helper {
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  text-transform: none;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.88rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--color-primary);
+  background-color: #FFFFFF;
+}
+
+.form-radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-radio-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.form-radio-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-card-content {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  background-color: var(--bg-primary);
+}
+
+.form-radio-card input[type="radio"]:checked + .radio-card-content {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-hover);
+}
+
+.image-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.image-selection-card {
+  position: relative;
+  cursor: pointer;
+  aspect-ratio: 1;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+  background-color: var(--color-primary-light);
+}
+
+.image-selection-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-selection-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.image-selection-card input[type="radio"]:checked + img {
+  filter: brightness(0.9);
+}
+
+.image-selection-card.selected {
+  border-color: var(--color-primary);
+}
+
+.image-selection-card.is-custom-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  color: var(--color-text-muted);
+  background-color: var(--bg-primary);
+}
+
+.image-selection-card.is-custom-trigger span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.selected-tick {
+  display: none;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 15px;
+  height: 15px;
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+}
+
+.image-selection-card input[type="radio"]:checked + .selected-tick {
+  display: flex;
+}
+
+/* Meal Selector inside Plan */
+.recipe-selection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.recipe-select-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  background-color: var(--bg-card);
+}
+
+.recipe-select-item.selected {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.recipe-select-img {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-sm);
+  object-fit: cover;
+}
+
+.recipe-select-info {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.recipe-select-name {
+  font-family: var(--font-family-headings);
+  font-weight: 700;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recipe-select-type {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.recipe-select-type.comida { color: #E8A838; }
+.recipe-select-type.cena { color: #5B6D8C; }
+
+.recipe-select-tick {
+  color: var(--color-primary);
+  font-size: 1.15rem;
+  display: none;
+}
+
+.recipe-select-item.selected .recipe-select-tick {
+  display: block;
+}
+
+.recipe-select-empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   LISTA DE LA COMPRA (SHOPPING LIST INTERACTION)
+   ========================================================================== */
+.header-brand-modal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-brand-modal i {
+  font-size: 1.6rem;
+}
+
+.shopping-toolbar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  background-color: var(--color-primary-light);
+  padding: 6px;
+  border-radius: var(--border-radius-sm);
+  justify-content: space-between;
+}
+
+.shopping-toolbar button {
+  flex: 1;
+}
+
+.shopping-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.shopping-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-card);
+  cursor: pointer;
+  gap: 10px;
+}
+
+.shopping-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 0.65rem;
+}
+
+.shopping-item.bought {
+  border-color: var(--color-success-light);
+  background-color: var(--color-success-light);
+  opacity: 0.6;
+}
+
+.shopping-item.bought .shopping-checkbox {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.shopping-item-name {
+  flex-grow: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.shopping-item.bought .shopping-item-name {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.shopping-item.bought.hidden-bought {
+  display: none !important;
+}
+
+.shopping-empty-state {
+  text-align: center;
+  padding: 32px 12px;
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.shopping-empty-state i {
+  font-size: 2rem;
+  color: var(--color-primary);
+  opacity: 0.5;
+}
+
+.shopping-empty-state p {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.shopping-summary-info {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   POSTER EXPORT DESIGN (STYLING FOR DOWNLOADED MENUS)
+   ========================================================================== */
+.share-poster {
+  width: 500px;
+  padding: 36px;
+  background-color: #FFFFFF;
+  color: #332E27;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+}
+
+/* Decorative background elements inside poster */
+.share-poster::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; width: 140px; height: 140px;
+  background: radial-gradient(circle, #FCEFD2 0%, rgba(255,255,255,0) 70%);
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.poster-header {
+  border-bottom: 2px solid #E29B30;
+  padding-bottom: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.poster-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #E29B30;
+  margin-bottom: 6px;
+}
+
+.poster-brand i {
+  font-size: 2.2rem;
+}
+
+.poster-brand h1 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: #332E27;
+}
+
+.poster-week-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #7E7467;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.poster-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.poster-day-row {
+  display: flex;
+  border-bottom: 1px solid #F0ECE4;
+  padding-bottom: 10px;
+  align-items: flex-start;
+}
+
+.poster-day-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.poster-day-name {
+  width: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #E29B30;
+}
+
+.poster-day-meals {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.poster-meal-line {
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.poster-meal-line strong {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #A49A8E;
+  width: 55px;
+}
+
+.poster-meal-name {
+  color: #332E27;
+  font-weight: 600;
+}
+
+.poster-meal-name.empty {
+  color: #A49A8E;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.poster-footer {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: #A49A8E;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-top: 1px dashed #F0ECE4;
+  padding-top: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Form element inside modal needs flex layout to prevent clipping the footer */
+#recipe-form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Quick remove meal slot button */
+.btn-remove-meal-slot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-danger);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+  transition: var(--transition-fast);
+}
+
+.btn-remove-meal-slot i {
+  font-size: 0.8rem;
+}
+
+.btn-remove-meal-slot:active {
+  background-color: var(--color-danger);
+  color: #FFFFFF;
+  border-color: var(--color-danger);
+}
+
+/* Footer actions container for weekly planner */
+.weekly-actions-footer {
+  padding: 8px 0 24px;
+  display: flex;
+  justify-content: center;
+}
+
+#btn-download-menu-large {
+  padding: 12px 18px;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-primary);
+}

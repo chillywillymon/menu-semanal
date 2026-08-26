@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cocinitas Time — Menú Semanal</title>
+  <!-- Google Fonts: Outfit (Headings) & Inter (UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons for a clean, organic icon aesthetic -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- html2canvas for downloading weekly menu as image -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Honey Spots (Organic SVG Blobs for desktop environment) -->
+  <div class="honey-blob blob-1">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#FCEFD2" d="M44.7,-76.6C58.1,-69.5,69.2,-58,77.7,-44.3C86.2,-30.7,92.1,-15.3,92.5,0.2C92.9,15.8,87.7,31.6,79.2,45.2C70.7,58.7,58.8,70.1,44.7,77.1C30.6,84.1,15.3,86.7,-0.2,87C-15.7,87.3,-31.4,85.3,-45.5,78.2C-59.6,71.2,-72.1,59.1,-79.8,44.8C-87.5,30.4,-90.4,15.2,-91,0.3C-91.6,-14.5,-89.9,-29,-82.7,-42C-75.6,-55.1,-63,-66.6,-49.2,-73.4C-35.4,-80.2,-20.3,-82.3,-2.7,-77.7C14.9,-73.1,31.3,-83.8,44.7,-76.6Z" transform="translate(100 100)" />
+    </svg>
+  </div>
+  <div class="honey-blob blob-2">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#FDF3DC" d="M38.1,-64.7C49.9,-58.5,60.5,-48.7,68.8,-36.4C77.1,-24.1,83.1,-9.4,82.4,4.9C81.8,19.3,74.5,33.2,64.9,44.8C55.3,56.5,43.3,65.8,29.9,71C16.4,76.2,1.5,77.3,-13.6,75.1C-28.7,72.9,-44,67.4,-56.3,57.7C-68.5,48.1,-77.7,34.3,-81.9,19.1C-86.1,4,-85.4,-12.6,-79.8,-27C-74.2,-41.5,-63.9,-53.8,-51.2,-59.7C-38.5,-65.6,-23.5,-65.2,-9.3,-63.8C4.9,-62.4,26.3,-71,38.1,-64.7Z" transform="translate(100 100)" />
+    </svg>
+  </div>
+
+  <!-- Mobile-first App Wrapper -->
+  <div class="app-mobile-container">
+    
+    <!-- Top Header Bar -->
+    <header class="mobile-header">
+      <div class="header-brand-row">
+        <div class="app-logo">
+          <i class="ph-fill ph-cooking-pot"></i>
+          <span>Cocinitas Time</span>
+        </div>
+        
+        <div class="header-action-buttons">
+          <!-- Download Menu Button (Only active on Weekly view) -->
+          <button class="btn-header-action" id="btn-download-menu" title="Descargar menú como imagen">
+            <i class="ph ph-image"></i>
+          </button>
+          
+          <!-- Add Recipe Button (Only active on Recetario view) -->
+          <button class="btn-header-action hidden" id="btn-add-recipe-header" title="Añadir nueva receta">
+            <i class="ph ph-plus"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Sub-header for Views (E.g. Week Selector or Search Bar) -->
+      <div class="header-sub-row" id="header-week-picker">
+        <div class="week-navigation-picker">
+          <button class="btn-picker-nav" id="btn-prev-week" title="Semana anterior">
+            <i class="ph ph-caret-left"></i>
+          </button>
+          <span class="week-text-display" id="week-display-label">Semana 28, 2026</span>
+          <button class="btn-picker-nav" id="btn-next-week" title="Semana siguiente">
+            <i class="ph ph-caret-right"></i>
+          </button>
+        </div>
+        <button class="btn-today-badge" id="btn-current-week">Hoy</button>
+      </div>
+    </header>
+
+    <!-- Main Scrollable App Content -->
+    <main class="mobile-content">
+      
+      <!-- 1. VISTA PLAN SEMANAL (TABLERO MÓVIL) -->
+      <section id="view-semanal-section" class="view-section active">
+        <div class="mobile-kanban-board" id="weekly-kanban-board">
+          <!-- Dynamically populated with Monday to Sunday cards -->
+        </div>
+        <div class="weekly-actions-footer">
+          <button class="btn btn-primary btn-block" id="btn-download-menu-large">
+            <i class="ph ph-image"></i>
+            <span>Descargar Menú Semanal (Imagen)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. VISTA DÍA A DÍA -->
+      <section id="view-dia-section" class="view-section hidden">
+        <div class="day-by-day-container" id="day-by-day-list">
+          <!-- Dynamically populated with Today, Tomorrow, Day After cards -->
+        </div>
+      </section>
+
+      <!-- 3. VISTA RECETARIO (GALERÍA MÓVIL) -->
+      <section id="view-recetario-section" class="view-section hidden">
+        <div class="recetario-toolbar">
+          <div class="search-box">
+            <i class="ph ph-magnifying-glass search-icon"></i>
+            <input type="text" id="recetario-search" placeholder="Buscar plato o ingrediente...">
+          </div>
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">Todos</button>
+            <button class="filter-tab" data-filter="Comida">Comidas</button>
+            <button class="filter-tab" data-filter="Cena">Cenas</button>
+          </div>
+        </div>
+        <div class="recipe-grid" id="recetario-recipe-grid">
+          <!-- Dynamically populated with recipe cards -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar (Dock) -->
+    <nav class="mobile-nav">
+      <a href="#" class="mobile-nav-item active" data-view="semanal">
+        <i class="ph ph-calendar-blank"></i>
+        <span>Plan</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-view="dia">
+        <i class="ph ph-list-bullets"></i>
+        <span>Día a Día</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-view="recetario">
+        <i class="ph ph-cooking-pot"></i>
+        <span>Recetario</span>
+      </a>
+      <a href="#" class="mobile-nav-item" id="mobile-shopping-trigger">
+        <i class="ph ph-shopping-cart-simple"></i>
+        <span class="badge" id="mobile-shopping-badge">0</span>
+        <span>Compra</span>
+      </a>
+    </nav>
+
+    <!-- Global Floating Action Button (FAB) - For quick recipe adding -->
+    <button class="fab" id="global-add-recipe-fab" title="Añadir Receta al Recetario">
+      <i class="ph ph-plus"></i>
+    </button>
+
+  </div>
+
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. MODAL: SELECCIONAR RECETA PARA EL PLAN -->
+  <div class="modal-backdrop" id="modal-select-meal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3>Asignar Plato</h3>
+          <p class="modal-subtitle" id="select-meal-title">Comida del Lunes</p>
+        </div>
+        <button class="btn-close-modal" id="btn-close-select-meal">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Search inside selector -->
+        <div class="search-box mb-4">
+          <i class="ph ph-magnifying-glass search-icon"></i>
+          <input type="text" id="select-meal-search" placeholder="Buscar receta...">
+        </div>
+
+        <div class="recipe-selection-list" id="select-meal-options">
+          <!-- Dynamically populated recipes list -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" id="btn-unlink-meal">Quitar Receta</button>
+        <div style="flex-grow: 1;"></div>
+        <button class="btn btn-secondary" id="btn-create-new-recipe-from-select">
+          <i class="ph ph-plus"></i>
+          <span>Crear Plato</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. MODAL: AÑADIR / EDITAR RECETA -->
+  <div class="modal-backdrop" id="modal-recipe-form">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 id="recipe-form-title">Nueva Receta</h3>
+          <p class="modal-subtitle">Introduce los detalles de la receta</p>
+        </div>
+        <button class="btn-close-modal" id="btn-close-recipe-form">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <form id="recipe-form">
+        <input type="hidden" id="recipe-form-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipe-name">Nombre del Plato <span class="required">*</span></label>
+            <input type="text" id="recipe-name" required placeholder="Ej: Crema de verduras">
+          </div>
+          
+          <div class="form-group">
+            <label>Tipo de Plato <span class="required">*</span></label>
+            <div class="form-radio-group">
+              <label class="form-radio-card">
+                <input type="radio" name="recipe-type" value="Comida" checked required>
+                <div class="radio-card-content">
+                  <i class="ph ph-sun"></i>
+                  <span>Comida</span>
+                </div>
+              </label>
+              <label class="form-radio-card">
+                <input type="radio" name="recipe-type" value="Cena" required>
+                <div class="radio-card-content">
+                  <i class="ph ph-moon"></i>
+                  <span>Cena</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="recipe-ingredients">Ingredientes <span class="required">*</span> <span class="label-helper">(Uno por línea)</span></label>
+            <textarea id="recipe-ingredients" rows="5" required placeholder="Ej:&#10;1 calabacín&#10;1 patata&#10;1 puerro&#10;Quesito rallado&#10;Aceite de oliva"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Imagen de Referencia</label>
+            <div class="image-selection-grid" id="image-selection-grid">
+              <!-- Dynamically populated default minimalist illustrations + URL option -->
+            </div>
+            <div class="image-url-input-container mt-2 hidden" id="image-custom-url-container">
+              <input type="text" id="recipe-image-url" placeholder="Pega la URL de una imagen en internet...">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-recipe-form">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Receta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. MODAL: LISTA DE LA COMPRA -->
+  <div class="modal-backdrop" id="modal-shopping-list">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="header-brand-modal">
+          <i class="ph-fill ph-shopping-cart-simple text-primary"></i>
+          <div>
+            <h3>Lista de la Compra</h3>
+            <p class="modal-subtitle" id="shopping-list-week-label">Semana 28, 2026</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-shopping-list">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="shopping-toolbar">
+          <button class="btn btn-secondary btn-sm" id="btn-toggle-purchased">
+            <i class="ph ph-eye-closed" id="toggle-purchased-icon"></i>
+            <span id="toggle-purchased-text">Ocultar</span>
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btn-copy-shopping">
+            <i class="ph ph-copy"></i>
+            <span>Copiar</span>
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btn-clear-purchased" title="Desmarcar todos los ingredientes">
+            <i class="ph ph-arrow-counter-clockwise"></i>
+            <span>Reiniciar</span>
+          </button>
+        </div>
+
+        <div class="shopping-list-container" id="shopping-list-content">
+          <!-- Dynamically populated checklist -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="shopping-summary-info">
+          <span id="shopping-summary-text">0 comprados de 0</span>
+        </div>
+        <button class="btn btn-primary" id="btn-close-shopping-footer">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Container for Dynamic Sharing Poster Generation -->
+  <div id="share-poster-holder" style="position: absolute; left: -9999px; top: -9999px;">
+    <!-- Populated and screen-captured offscreen via JS -->
+  </div>
+
+  <!-- App Main Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
