@@ -397,7 +397,7 @@ function renderMealCardHtml(recipe, dateStr, mealType) {
   return `
     <div class="filled-meal-card" data-date="${dateStr}" data-meal="${mealType}">
       <div class="meal-img-wrapper">
-        <img class="meal-img" src="${recipe.imagen || 'images/soup.png'}" alt="${recipe.nombre}">
+        <img class="meal-img" src="${recipe.imagen || 'images/soup.png'}" alt="${recipe.nombre}" crossorigin="anonymous" onerror="this.onerror=null; this.src='images/soup.png';">
         <button class="btn-remove-meal-slot" data-date="${dateStr}" data-meal="${mealType}" title="Quitar plato">
           <i class="ph ph-trash"></i>
         </button>
@@ -483,7 +483,7 @@ function renderDayByDay() {
       comidaHtml = `
         <div class="detail-meal-item">
           <div class="detail-meal-banner">
-            <img src="${comidaRecipe.imagen}" alt="${comidaRecipe.nombre}">
+            <img src="${comidaRecipe.imagen}" alt="${comidaRecipe.nombre}" crossorigin="anonymous" onerror="this.onerror=null; this.src='images/soup.png';">
           </div>
           <div class="detail-meal-body">
             <div class="detail-meal-badge-type comida"><i class="ph-fill ph-sun"></i> Almuerzo</div>
@@ -514,7 +514,7 @@ function renderDayByDay() {
       cenaHtml = `
         <div class="detail-meal-item">
           <div class="detail-meal-banner">
-            <img src="${cenaRecipe.imagen}" alt="${cenaRecipe.nombre}">
+            <img src="${cenaRecipe.imagen}" alt="${cenaRecipe.nombre}" crossorigin="anonymous" onerror="this.onerror=null; this.src='images/soup.png';">
           </div>
           <div class="detail-meal-body">
             <div class="detail-meal-badge-type cena"><i class="ph-fill ph-moon"></i> Cena</div>
@@ -599,7 +599,7 @@ function renderRecetarioGrid(filter = 'all', query = '') {
 
     card.innerHTML = `
       <div class="recipe-card-img-wrapper">
-        <img class="recipe-card-img" src="${recipe.imagen}" alt="${recipe.nombre}">
+        <img class="recipe-card-img" src="${recipe.imagen}" alt="${recipe.nombre}" crossorigin="anonymous" onerror="this.onerror=null; this.src='images/soup.png';">
         <span class="recipe-badge-type ${recipe.tipo.toLowerCase()}">${recipe.tipo}</span>
       </div>
       <div class="recipe-card-content">
@@ -724,7 +724,7 @@ function renderSelectMealOptions(currentAssignedId, query = '') {
     itemEl.className = `recipe-select-item ${isSelected ? 'selected' : ''}`;
     
     itemEl.innerHTML = `
-      <img class="recipe-select-img" src="${recipe.imagen}" alt="${recipe.nombre}">
+      <img class="recipe-select-img" src="${recipe.imagen}" alt="${recipe.nombre}" crossorigin="anonymous" onerror="this.onerror=null; this.src='images/soup.png';">
       <div class="recipe-select-info">
         <div class="recipe-select-name">${recipe.nombre}</div>
         <span class="recipe-select-type ${recipe.tipo.toLowerCase()}">
@@ -1266,6 +1266,10 @@ function downloadMenuAsImage() {
     const comidaRecipe = state.recipes.find(r => r.id === plan.comida_id);
     const cenaRecipe = state.recipes.find(r => r.id === plan.cena_id);
     
+    // Safety check for image URLs to prevent CORS tainting html2canvas
+    const comidaImg = comidaRecipe ? (comidaRecipe.imagen && comidaRecipe.imagen.startsWith('images/') ? comidaRecipe.imagen : 'images/soup.png') : 'images/soup.png';
+    const cenaImg = cenaRecipe ? (cenaRecipe.imagen && cenaRecipe.imagen.startsWith('images/') ? cenaRecipe.imagen : 'images/soup.png') : 'images/soup.png';
+
     const dayName = formatNiceDate(date).split(',')[0];
     
     dayRowsHtml += `
@@ -1273,12 +1277,14 @@ function downloadMenuAsImage() {
         <div class="poster-day-name">${dayName}</div>
         <div class="poster-day-meals">
           <div class="poster-meal-line">
+            ${comidaRecipe ? `<img src="${comidaImg}" style="width: 18px; height: 18px; object-fit: cover; border-radius: 4px; margin-right: 6px; display: inline-block; vertical-align: middle;" crossorigin="anonymous" onerror="this.onerror=null; this.src='images/soup.png';">` : ''}
             <strong>Almuerzo</strong>
             <span class="poster-meal-name ${!comidaRecipe ? 'empty' : ''}">
               ${comidaRecipe ? escapeHtml(comidaRecipe.nombre) : 'No planificado'}
             </span>
           </div>
           <div class="poster-meal-line">
+            ${cenaRecipe ? `<img src="${cenaImg}" style="width: 18px; height: 18px; object-fit: cover; border-radius: 4px; margin-right: 6px; display: inline-block; vertical-align: middle;" crossorigin="anonymous" onerror="this.onerror=null; this.src='images/soup.png';">` : ''}
             <strong>Cena</strong>
             <span class="poster-meal-name ${!cenaRecipe ? 'empty' : ''}">
               ${cenaRecipe ? escapeHtml(cenaRecipe.nombre) : 'No planificado'}
@@ -1316,28 +1322,57 @@ function downloadMenuAsImage() {
   holder.appendChild(poster);
 
   // 2. Render this element using html2canvas
-  // We use scale: 2 for a crisp high-res image (ideal for sending over WhatsApp)
+  // We use scale: 2.5 for a crisp high-res image
   html2canvas(poster, {
     scale: 2.5,
     backgroundColor: '#FFFFFF',
     logging: false
   }).then(canvas => {
-    // 3. Export as image download
-    try {
-      const dataUrl = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.download = `menu_semana_${week}_${year}.png`;
-      link.href = dataUrl;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (e) {
-      console.error(e);
-      alert('Error al generar la imagen. Inténtalo de nuevo.');
-    } finally {
-      // Clean up holder
-      holder.innerHTML = '';
-    }
+    const fileName = `menu_semana_${week}_${year}.png`;
+    
+    canvas.toBlob(blob => {
+      if (!blob) {
+        alert('Error al generar la imagen. Inténtalo de nuevo.');
+        holder.innerHTML = '';
+        return;
+      }
+      
+      const file = new File([blob], fileName, { type: 'image/png' });
+      
+      // Native sharing for iOS/Mobile Safari
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({
+          files: [file],
+          title: `Menú de la Semana ${week}`,
+          text: `Planificación del menú semanal - Cocinitas Time.`
+        }).then(() => {
+          holder.innerHTML = '';
+        }).catch(err => {
+          // Do not report AbortError (user cancelled)
+          if (err.name !== 'AbortError') {
+            console.error('Error al compartir:', err);
+            alert('Error al compartir la imagen.');
+          }
+          holder.innerHTML = '';
+        });
+      } else {
+        // Desktop fallback
+        try {
+          const dataUrl = canvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.download = fileName;
+          link.href = dataUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (e) {
+          console.error(e);
+          alert('Error al generar la descarga.');
+        } finally {
+          holder.innerHTML = '';
+        }
+      }
+    }, 'image/png');
   });
 }
 

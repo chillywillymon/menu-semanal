@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Cocinitas Time — Menú Semanal</title>
   <!-- Google Fonts: Outfit (Headings) & Inter (UI) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,6 +12,8 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <!-- html2canvas for downloading weekly menu as image -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍳</text></svg>">
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -42,8 +44,8 @@
         
         <div class="header-action-buttons">
           <!-- Download Menu Button (Only active on Weekly view) -->
-          <button class="btn-header-action" id="btn-download-menu" title="Descargar menú como imagen">
-            <i class="ph ph-image"></i>
+          <button class="btn-header-action" id="btn-download-menu" title="Compartir menú como imagen">
+            <i class="ph ph-share-network"></i>
           </button>
           
           <!-- Add Recipe Button (Only active on Recetario view) -->
@@ -78,8 +80,8 @@
         </div>
         <div class="weekly-actions-footer">
           <button class="btn btn-primary btn-block" id="btn-download-menu-large">
-            <i class="ph ph-image"></i>
-            <span>Descargar Menú Semanal (Imagen)</span>
+            <i class="ph ph-share-network"></i>
+            <span>Compartir Menú Semanal</span>
           </button>
         </div>
       </section>

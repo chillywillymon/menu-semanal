@@ -60,15 +60,15 @@ body {
   background-color: var(--bg-primary);
   color: var(--color-text-main);
   min-height: 100vh;
-  overflow-x: hidden;
+  min-height: 100dvh;
+  overflow: hidden; /* Lock viewport scroll for app-like feel */
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-  
-  /* Center the app on desktop screen */
+  padding: 0;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -156,14 +156,10 @@ button, input, textarea {
    ========================================================================== */
 .app-mobile-container {
   width: 100%;
-  max-width: 440px;          /* Perfect mobile size on desktop */
-  height: 85vh;             /* Standout device height */
-  max-height: 880px;
-  min-height: 620px;
+  max-width: 480px;
+  height: 100vh;
+  height: 100dvh;
   background-color: var(--bg-card);
-  border: 10px solid var(--bg-dark-bezel); /* Device frame bezel */
-  border-radius: 36px;
-  box-shadow: var(--shadow-lg);
   overflow: hidden;
   position: relative;
   display: flex;
@@ -172,17 +168,9 @@ button, input, textarea {
 }
 
 /* Responsive adjust for pure mobile screens */
-@media (max-width: 480px), (max-height: 550px) {
-  body {
-    padding: 0;
-  }
+@media (max-width: 480px) {
   .app-mobile-container {
     max-width: 100vw;
-    height: 100vh;
-    max-height: 100vh;
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
   }
 }
 
@@ -328,7 +316,8 @@ button, input, textarea {
    NAVIGATION BAR (BOTTOM DOCK)
    ========================================================================== */
 .mobile-nav {
-  height: var(--mobile-nav-height);
+  height: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-top: 1px solid var(--color-border);
@@ -379,7 +368,7 @@ button, input, textarea {
 /* Floating Action Button (FAB) */
 .fab {
   position: absolute;
-  bottom: calc(16px + var(--mobile-nav-height));
+  bottom: calc(16px + var(--mobile-nav-height) + env(safe-area-inset-bottom, 0px));
   right: 16px;
   width: 52px;
   height: 52px;
